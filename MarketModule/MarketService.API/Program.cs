@@ -1,10 +1,16 @@
 using MarketService.Data.Contexts;
 using MarketService.Data.Repositories;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq();
+});
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<MarketContext>(opt =>

@@ -40,7 +40,7 @@ namespace InventoryService.API.Controllers
         [HttpPatch]
         public async Task<IActionResult> Update(ItemInventoryUpdateDto dto)
         {
-            var updatedEntity = await _itemInventoryRepository.GetById(dto.Id);
+            var updatedEntity = await _itemInventoryRepository.GetItemInventory(dto.ItemId, dto.InventoryId);
             if(updatedEntity != null)
             {
                 updatedEntity.Count =updatedEntity.Count - dto.Count;

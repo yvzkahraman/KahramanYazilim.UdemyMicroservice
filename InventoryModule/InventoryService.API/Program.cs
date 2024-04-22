@@ -1,8 +1,27 @@
+using InventoryService.API.Consumers;
 using InventoryService.Data.Repositories;
+using MassTransit;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumers(Assembly.GetExecutingAssembly());
+    x.UsingRabbitMq();
+});
+
+var control = Bus.Factory.CreateUsingRabbitMq(x =>
+{
+    x.ReceiveEndpoint("market-created-event", e =>
+    {
+        e.Consumer<MarketCreatedConsumer>();
+    });
+});
+
+await control.StartAsync();
 
 builder.Services.AddScoped<ItemRepository>();
 builder.Services.AddScoped<InventoryRepository>();

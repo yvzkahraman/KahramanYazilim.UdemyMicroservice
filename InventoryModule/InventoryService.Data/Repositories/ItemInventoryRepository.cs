@@ -28,9 +28,13 @@ namespace InventoryService.Data.Repositories
             return result;
         }
 
-        public async Task<ItemInventory?> GetById(string id)
+        public async Task<ItemInventory?> GetItemInventory(string itemId, string inventoryId)
         {
-            var filter = Builders<ItemInventory>.Filter.Eq(x => x.Id, id);
+            var filterI = Builders<ItemInventory>.Filter.Eq(x => x.ItemId, itemId);
+            var filterII = Builders<ItemInventory>.Filter.Eq(x => x.InventoryId, inventoryId);
+
+
+            var filter = Builders<ItemInventory>.Filter.And(filterI, filterII);
 
             var result = await itemInventoryCollection.Find(filter).FirstOrDefaultAsync();
 
